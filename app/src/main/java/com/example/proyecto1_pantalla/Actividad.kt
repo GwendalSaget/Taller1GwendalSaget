@@ -3,41 +3,29 @@ package com.example.proyecto1_pantalla
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
-import android.text.style.BackgroundColorSpan
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-//import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.proyecto1_pantalla.ui.theme.Proyecto1pantallaTheme
-import java.util.Calendar
 
 public class Actividad : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -83,59 +71,107 @@ fun getUserName(context: Context): String? {
 @Composable
 public fun GreetingName(modifier: Modifier, backgroundColor: Color) {
     var userName by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     // Recupera el nombre guardado o muestra "Amigo" por defecto
     val savedName = getUserName(context) ?: "Amigo"
 
-    Surface(color = backgroundColor) {
-        Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Surface(color = backgroundColor, modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp), // Ajouter un padding autour des éléments
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center // Centrer verticalement les éléments
+        ) {
             Text(
                 text = "¿Un nuevo nombre?",
                 color = Color.White,
                 fontSize = 30.sp,
-                modifier = modifier
+                modifier = Modifier.padding(8.dp) // Espace autour du texte
             )
-        }
 
-        // Campo de texto para ingresar un nuevo nombre
-        OutlinedTextField(
-            value = userName,
-            onValueChange = { userName = it },
-            label = { Text("¿Cómo te llamas?", color = Color.White) },
-            modifier = Modifier.offset(50.dp, 550.dp)
-        )
+            // Campo de texto para ingresar un nuevo nombre
+            OutlinedTextField(
+                value = userName,
+                onValueChange = { userName = it },
+                label = { Text("¿Cómo te llamas?", color = Color.White) },
+                modifier = Modifier.padding(8.dp) // Espace autour du champ de texte
+            )
 
-        // Botón para guardar el nombre
-        Column(modifier = Modifier.offset(100.dp, 700.dp)) {
+            // Botón para guardar el nombre
             Button(
                 onClick = {
                     saveUserName(context, userName)
-                    Toast.makeText(context, "¡Todo bien!", Toast.LENGTH_SHORT).show()
-                }
+                    Toast.makeText(context, "¡Nombre guardado con éxito!", Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier.padding(8.dp)
             ) {
                 Text("Guardar nombre", fontSize = 20.sp)
             }
-        }
-        Column(modifier = Modifier.offset(149.dp, 115.dp)) {
+
+            // Botón para iniciar la tarea en segundo plano con AsyncTask
+            Button(
+                onClick = {
+                    isLoading = true
+                    BackgroundTask(context) { isLoading = false }.execute()
+                },
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text("Iniciar Tarea", fontSize = 20.sp)
+            }
+
+            // ProgressBar de cargamento
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.padding(16.dp),
+                    color = Color.White,
+                    strokeWidth = 5.dp
+                )
+            }
+
+            // Botón para ir a MainActivity
             Button(
                 onClick = {
                     val intent = Intent(context, MainActivity::class.java)
-                    context.startActivity(intent)},
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.padding(8.dp)
             ) {
                 Text(text = stringResource(R.string.Principal3), fontSize = 20.sp)
             }
-        }
-        Column(modifier = Modifier.offset(140.dp, 200.dp)) {
+
+            // Botón para ir a ThirdScreen
             Button(
                 onClick = {
                     val intent = Intent(context, ThirdScreen::class.java)
                     context.startActivity(intent)
-                }
-            )  {
+                },
+                modifier = Modifier.padding(8.dp)
+            ) {
                 Text(text = stringResource(R.string.Principal2), fontSize = 20.sp)
             }
         }
+    }
+}
+
+// Clase AsyncTask para manejar la tarea en segundo plano
+class BackgroundTask(val context: Context, val onTaskComplete: () -> Unit) : AsyncTask<Void, Void, Void>() {
+    override fun onPreExecute() {
+        super.onPreExecute()
+        Toast.makeText(context, "Esperar durante la tarea...", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun doInBackground(vararg params: Void?): Void? {
+        Thread.sleep(3000)
+        return null
+    }
+
+    override fun onPostExecute(result: Void?) {
+        super.onPostExecute(result)
+        Toast.makeText(context, "Tarea acabada con exito!", Toast.LENGTH_SHORT).show()
+        onTaskComplete()
     }
 }
 
