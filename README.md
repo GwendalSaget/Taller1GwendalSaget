@@ -93,3 +93,5 @@ Esta función traduce un valor entero en un color. Por ejemplo:
 Si el valor no coincide con ninguno de los colores predefinidos, se devuelve el color gris por defecto.
 
 Como en las actividades anteriores, también hay botones para volver a la pantalla principal o navegar a la pantalla de ingreso de nombre.
+
+enlace GitHub : https://github.com/GwendalSaget/Taller1GwendalSaget
