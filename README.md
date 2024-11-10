@@ -1,4 +1,20 @@
-Este proyecto es una aplicación Android desarrollada utilizando Jetpack Compose, que consiste en tres actividades principales: la pantalla de bienvenida (MainActivity), una pantalla para ingresar y guardar el nombre del usuario (Actividad), y una pantalla para seleccionar un color de fondo (ThirdScreen). 
+Este proyecto es una aplicación Android desarrollada utilizando Jetpack Compose, que consiste en tres actividades principales: una pantalla de verificacion de credenciales (Connection), la pantalla de bienvenida (MainActivity), una pantalla para ingresar y guardar el nombre del usuario (Actividad), y una pantalla para seleccionar un color de fondo (ThirdScreen). 
+
+Coneccion :
+
+Esta actividad, Connexion.kt, es una pantalla de inicio de sesión en una aplicación Android utilizando Jetpack Compose y Firebase Realtime Database.
+
+Inicialización de Firebase : Se conecta a la base de datos Firebase y verifica si está vacía.
+
+Interfaz de Usuario : La pantalla contiene dos campos de texto para el "Nombre de usuario" y "Contraseña", junto con un botón que cambia de función:
+
+Si la base de datos está vacía, el botón muestra "Nuevas Credenciales" y permite crear un nuevo usuario.
+Si la base de datos ya contiene datos, el botón muestra "Conectar" y permite iniciar sesión.
+Crear Nuevas Credenciales : Si la base de datos está vacía, al hacer clic en "Nuevas Credenciales", se guardan el nombre de usuario y la contraseña en Firebase y se redirige al usuario a MainActivity.
+
+Validación de Credenciales : Si hay datos en la base de datos, al hacer clic en "Conectar", se verifica que los datos ingresados coincidan con los almacenados. Si coinciden, se abre MainActivity; si no, aparece un mensaje "Malas credenciales".
+
+Mensajes de Error : Se muestran mensajes de error o advertencia si hay problemas de conexión o si los campos están incompletos.
 
 Actividad 1: MainActivity
 La MainActivity muestra un saludo personalizado según la hora del día y el nombre del usuario guardado en las preferencias compartidas. Además, permite navegar a otras dos actividades mediante botones.
