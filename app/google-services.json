@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "836232648103",
+    "firebase_url": "https://taller3-be9bb-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "taller3-be9bb",
+    "storage_bucket": "taller3-be9bb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836232648103:android:74c14e3934a6e23eba1282",
+        "android_client_info": {
+          "package_name": "com.example.proyecto1_pantalla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8DYMJ-SkVcXDjXg4EflkEKPBnC8Badf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

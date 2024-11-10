@@ -71,7 +71,6 @@ fun getUserName(context: Context): String? {
 @Composable
 public fun GreetingName(modifier: Modifier, backgroundColor: Color) {
     var userName by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     // Recupera el nombre guardado o muestra "Amigo" por defecto
@@ -111,26 +110,6 @@ public fun GreetingName(modifier: Modifier, backgroundColor: Color) {
                 Text("Guardar nombre", fontSize = 20.sp)
             }
 
-            // Botón para iniciar la tarea en segundo plano con AsyncTask
-            Button(
-                onClick = {
-                    isLoading = true
-                    BackgroundTask(context) { isLoading = false }.execute()
-                },
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text("Iniciar Tarea", fontSize = 20.sp)
-            }
-
-            // ProgressBar de cargamento
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(16.dp),
-                    color = Color.White,
-                    strokeWidth = 5.dp
-                )
-            }
-
             // Botón para ir a MainActivity
             Button(
                 onClick = {
@@ -153,25 +132,6 @@ public fun GreetingName(modifier: Modifier, backgroundColor: Color) {
                 Text(text = stringResource(R.string.Principal2), fontSize = 20.sp)
             }
         }
-    }
-}
-
-// Clase AsyncTask para manejar la tarea en segundo plano
-class BackgroundTask(val context: Context, val onTaskComplete: () -> Unit) : AsyncTask<Void, Void, Void>() {
-    override fun onPreExecute() {
-        super.onPreExecute()
-        Toast.makeText(context, "Esperar durante la tarea...", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun doInBackground(vararg params: Void?): Void? {
-        Thread.sleep(3000)
-        return null
-    }
-
-    override fun onPostExecute(result: Void?) {
-        super.onPostExecute(result)
-        Toast.makeText(context, "Tarea acabada con exito!", Toast.LENGTH_SHORT).show()
-        onTaskComplete()
     }
 }
 
