@@ -50,7 +50,6 @@ class FragmentDetails : Fragment() {
             )
         }
     }
-
     private fun getPersonFromPreferences(context: Context): Personne {
         val sharedPreferences = context.getSharedPreferences("PersonPrefs", Context.MODE_PRIVATE)
         val nombre = sharedPreferences.getString("nombre", "") ?: ""
