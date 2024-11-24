@@ -55,7 +55,12 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    val fragment_version = "1.8.5"
 
+    // Kotlin
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
     // Compose dependencies
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)

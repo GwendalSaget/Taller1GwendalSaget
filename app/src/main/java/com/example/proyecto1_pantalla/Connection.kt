@@ -1,5 +1,6 @@
 package com.example.proyecto1_pantalla
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -96,7 +97,7 @@ fun ConnexionScreen(isDatabaseEmpty: Boolean, onCheckDatabaseEmpty: () -> Unit) 
 }
 
 fun createNewCredentials(
-    context: android.content.Context,
+    context: Context,
     username: String,
     password: String,
     onCheckDatabaseEmpty: () -> Unit
@@ -118,7 +119,7 @@ fun createNewCredentials(
     }
 }
 
-fun validateCredentials(context: android.content.Context, enteredUsername: String, enteredPassword: String) {
+fun validateCredentials(context: Context, enteredUsername: String, enteredPassword: String) {
     val database = FirebaseDatabase.getInstance().reference.child("usuarios").child("0")
     if (enteredUsername.isNotEmpty() && enteredPassword.isNotEmpty()) {
         database.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -127,6 +128,7 @@ fun validateCredentials(context: android.content.Context, enteredUsername: Strin
                 val storedPassword = snapshot.child("password").value.toString()
 
                 if (enteredUsername == storedUsername && enteredPassword == storedPassword) {
+                    saveUserName(context,enteredUsername)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 } else {
                     Toast.makeText(context, "Malas credenciales", Toast.LENGTH_SHORT).show()
@@ -140,4 +142,19 @@ fun validateCredentials(context: android.content.Context, enteredUsername: Strin
     } else {
         Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
     }
+}
+
+// Función que guarda el nombre de usuario en SharedPreferences
+fun saveUserName(context: Context, name: String) {
+    val sharedPref = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+    with(sharedPref.edit()) {
+        putString("USER_NAME", name)
+        apply()
+    }
+}
+
+// Función que recupera el nombre de usuario de SharedPreferences
+fun getUserName(context: Context): String? {
+    val sharedPref = context.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+    return sharedPref.getString("USER_NAME", null) // Valor por defecto es null
 }

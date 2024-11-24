@@ -1,21 +1,11 @@
 package com.example.proyecto1_pantalla
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.text.style.BackgroundColorSpan
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Button
+import androidx.appcompat.app.AppCompatActivity // Modifié pour utiliser AppCompatActivity
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,54 +13,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-//import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import com.example.proyecto1_pantalla.ui.theme.Proyecto1pantallaTheme
 import java.util.Calendar
-//import java.time.chrono.IsoEra
-//import java.time.temporal.IsoFields
 
-public class MainActivity : ComponentActivity() {
+
+class MainActivity : AppCompatActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Se obtiene el color seleccionado de las preferencias guardadas
-        val selectedColor = getSelectedColor(this)
-
-        // Se obtiene el nombre del usuario de las preferencias guardadas
         val nombre = getUserName(this)
-
-        // Se establece el contenido con la temática de la aplicación
         setContent {
             Proyecto1pantallaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
 
-                    // Se llama a la función Greeting que muestra el saludo
                     Greeting(
                         name = "$nombre",
                         modifier = Modifier
                             .fillMaxSize()
-                            .wrapContentSize(Alignment.Center),
-                        backgroundColor = GetColor(selectedColor)
+                            .padding(top = 90.dp),
+                        backgroundColor = Color.LightGray
                     )
                 }
             }
         }
+        loadFragment(FragmentLista())
+        loadFragment(FragmentDetails())
+    }
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .add(android.R.id.content, fragment)
+            .commit()
+
     }
 }
 
-// Función composable que obtiene la hora actual
 @Composable
 fun GetTime(): Int {
     val calendar = Calendar.getInstance()
 
-    // Obtiene la hora en formato de 24 horas
     var hour = calendar.get(Calendar.HOUR_OF_DAY)
     return hour
 }
@@ -79,9 +65,9 @@ fun GetTime(): Int {
 @Composable
 public fun Greeting(name: String, modifier: Modifier, backgroundColor: Color) {
     Surface(color = backgroundColor) {
+        var hour = GetTime();
 
-        // Dependiendo de la hora, se muestra un saludo diferente
-        if (GetTime() < 19 && GetTime() >= 12) {
+        if (hour < 19 && hour >= 12) {
             Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "Buenas tardes $name!",
@@ -90,7 +76,7 @@ public fun Greeting(name: String, modifier: Modifier, backgroundColor: Color) {
                     modifier = modifier
                 )
             }
-        } else if (GetTime() >= 19) {
+        } else if (hour >= 19) {
             Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "Buenas noches $name!",
@@ -99,7 +85,7 @@ public fun Greeting(name: String, modifier: Modifier, backgroundColor: Color) {
                     modifier = modifier
                 )
             }
-        } else if (GetTime() < 12) {
+        } else if (hour < 12) {
             Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "Buenos días $name!",
@@ -107,31 +93,6 @@ public fun Greeting(name: String, modifier: Modifier, backgroundColor: Color) {
                     fontSize = 30.sp,
                     modifier = modifier
                 )
-            }
-        }
-
-        // Botón que navega a la actividad 'Actividad'
-        val context = LocalContext.current
-        Column(modifier = Modifier.offset(132.dp, 115.dp)) {
-            Button(
-                onClick = {
-                    val intent = Intent(context, Actividad::class.java)
-                    context.startActivity(intent)
-                }
-            ) {
-                Text(text = stringResource(R.string.Principal), fontSize = 20.sp)
-            }
-        }
-
-        // Botón que navega a 'ThirdScreen'
-        Column(modifier = Modifier.offset(140.dp, 200.dp)) {
-            Button(
-                onClick = {
-                    val intent = Intent(context, ThirdScreen::class.java)
-                    context.startActivity(intent)
-                }
-            ) {
-                Text(text = stringResource(R.string.Principal2), fontSize = 20.sp)
             }
         }
     }
@@ -151,3 +112,8 @@ fun GreetingPreview() {
         )
     }
 }
+
+// comme gestion novelas mais avec des personnes
+// 2 frag, 1 qui print la liste de personnes (juste les prénoms)
+// 1 autre qui montre les détails de la personne (nom, prénom, âge)
+// widget qui print le compte de personne avec le bouton pour actualiser
